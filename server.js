@@ -15,6 +15,14 @@ const friends = [
     }
 ];
 
+app.use((req, res, next) => {
+    const start = Date.now();
+    next();
+    // The flow of execution returns back to here after route-handler returns a response
+    const delta = Date.now() - start;
+    console.log(`${req.method} ${req.url} ${delta}ms`);
+})
+
 app.get('/friends', (req, res) => {
     res.json(friends);
 });
