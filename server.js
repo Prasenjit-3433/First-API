@@ -1,5 +1,8 @@
 const express = require('express');
 
+const friendsController = require('./controllers/friends.controller');
+const messagesController = require('./controllers/messages.controller');
+
 const app = express();
 
 const PORT = 3000;
@@ -25,41 +28,12 @@ app.use((req, res, next) => {
 
 app.use(express.json());
 
-app.post('/friends', (req, res) => {
-    if (!req.body.name) {
-        return res.status(400).json({error: 'Missing friend name'});
-    }
+app.post('/friends', friendsController.postFriend);
+app.get('/friends', friendsController.getFriends);
+app.get('/friends/:friendId', friendsController.getFriend);
 
-    const newFriend = {
-        id: friends.length,
-        name: req.body.name
-    };
-    friends.push(newFriend);
-
-    res.status(200).json(newFriend);
-});
-
-app.get('/friends', (req, res) => {
-    res.json(friends);
-});
-
-app.get('/friends/:friendId', (req, res) => {
-    const friendId = Number(req.params.friendId);
-    const friend = friends[friendId];
-    if(friend) {
-        res.status(200).json(friend);
-    } else {
-        res.status(404).json({ error: 'Friend does not found!'});
-    }
-});
-
-app.get('/messages', (req, res) => {
-    res.send('<ul><li>Hello Albert!</li></ul>');
-});
-
-app.post('/messages', (req, res) => {
-    res.send('Updating messages....!');
-});
+app.get('/messages', messagesController.getMessages);
+app.post('/messages', messagesController.postMessage);
 
 app.listen(PORT, () => {
     console.log(`Listening on ${PORT}...`);
