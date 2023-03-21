@@ -1,3 +1,5 @@
+const path = require('path');
+
 const express = require('express');
 
 const friendsRouter = require('./routes/friends.router');
@@ -15,6 +17,8 @@ app.use((req, res, next) => {
     console.log(`${req.method} ${req.baseUrl}${req.url} ${delta}ms`);
 });
 
+// The path passed into the `static` middleware is relative to the folder from where you launch the node app
+app.use('/site', express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 
 app.use('/friends', friendsRouter);
