@@ -7,6 +7,9 @@ const messagesRouter = require('./routes/messages.router');
 
 const app = express();
 
+app.set('view engine', 'hbs');
+app.set('views', path.join(__dirname, 'views'));
+
 const PORT = 3000;
 
 app.use((req, res, next) => {
@@ -18,9 +21,15 @@ app.use((req, res, next) => {
 });
 
 // The path passed into the `static` middleware is relative to the folder from where you launch the node app
-app.use('/site', express.static(path.join(__dirname, 'public')));
+app.use('/public', express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 
+app.get('/', (req, res) => {
+    res.render('index', {
+        title: 'My Friends Are Clever',
+        caption: 'Let\'s go skiing!',
+    });
+});
 app.use('/friends', friendsRouter);
 app.use('/messages', messagesRouter);
 
